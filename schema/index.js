@@ -1,7 +1,8 @@
 import {GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLBoolean, GraphQLList, GraphQLSchema } from 'graphql';
 import axios from 'axios';
 
-const url = 'https://api.spacexdata.com/v3/launches';
+const url_launches = 'https://api.spacexdata.com/v3/launches';
+const url_rockets = 'https://api.spacexdata.com/v3/rockets';
 
 const LaunchType = new GraphQLObjectType({
     name : 'Launch',
@@ -30,9 +31,30 @@ const RootQuery = new GraphQLObjectType({
         launches : {
             type : new GraphQLList(LaunchType),
             resolve : (parent, args) => {
-                return axios.get(url).then(res => res.data)
+                return axios.get(url_launches).then(res => res.data)
             }
-        }
+        },
+        launch : {
+            type : LaunchType,
+            args : { flight_number : { type : GraphQLInt}},
+            resolve : (parent, args) => {
+                return axios.get(`${url_launches}/${args.flight_number}`).then(res => res.data)
+            }
+        },
+        rockets : {
+            type : new GraphQLList(RocketType),
+            resolve : (parent, args) => {
+                return axios.get(url_rockets).then(res => res.data)
+            }
+        },
+        rocket : {
+            type : RocketType,
+            args : { rocket_id : { type : GraphQLString}},
+            resolve : (parent, args) => {
+                return axios.get(`${url_rockets}/${args.rocket_id}`).then(res => res.data)
+            }
+        },
+
     }
 })
 
