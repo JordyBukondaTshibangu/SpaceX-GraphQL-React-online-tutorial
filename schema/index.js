@@ -56,8 +56,58 @@ const RootQuery = new GraphQLObjectType({
         },
 
     }
+});
+
+const RootMutation = new GraphQLObjectType({
+    name : "Mutation",
+    fields : {
+        createLaunch : {
+            type : LaunchType,
+            args : {
+                flight_number : { type : GraphQLInt },
+                mission_name : { type : GraphQLString },
+                launch_year : { type : GraphQLString },
+                launch_date_local : { type : GraphQLString },
+                launch_success : { type : GraphQLBoolean },
+                rocket : { type : RocketType }
+            },
+            resolver : (parent, args) => {
+                // save to the db
+                // data are availabe on args
+                // return created Launch   
+            }
+        },
+        updateLaunch : {
+            type : LaunchType,
+            args : {
+                flight_number : { type : GraphQLInt },
+                mission_name : { type : GraphQLString },
+                launch_year : { type : GraphQLString },
+                launch_date_local : { type : GraphQLString },
+                launch_success : { type : GraphQLBoolean },
+                rocket : { type : RocketType }
+            },
+            resolver : (parent, args) => {
+                // update to the db
+                // data are availabe on args
+                // retturn updated Launch
+            }
+        },
+        deleteLaunch : {
+            type : LaunchType,
+            args : {
+                flight_number : { type : GraphQLInt }
+            },
+            resolver : (parent, args) => {
+                // delete to the db
+                // data are availabe on args
+                // retturn updated Launch
+            }
+        }
+    }
 })
 
 export default new GraphQLSchema({
     query : RootQuery,
+    mutation : Mutation
 })
