@@ -128,22 +128,19 @@ const RootMutation = new GraphQLObjectType({
         updateLaunch : {
             type : LaunchType,
             args : {
+                flight_number : { type : GraphQLInt },
                 mission_name : { type : GraphQLString },
-                launch_year : { type : GraphQLString },
+                launch_year : { type : GraphQLInt },
                 launch_date_local : { type : GraphQLString },
                 launch_success : { type : GraphQLBoolean },
             },
-            resolve : (parent, args) => {
+            resolve : async(parent, args) => {
 
-                const  {
-                    mission_name ,
-                    launch_year ,
-                    launch_date_local ,
-                    launch_success 
-                } = args
+                const  { flight_number, mission_name , launch_year , launch_date_local , launch_success } = args;
+                const updatedLaunch = { flight_number, mission_name , launch_year , launch_date_local , launch_success }; 
+                const newLaunch = await Launch.findOneAndUpdate({flight_number}, updatedLaunch);
                 
-                
-                // return args;
+                return newLaunch;
             }
         },
         deleteLaunch : {

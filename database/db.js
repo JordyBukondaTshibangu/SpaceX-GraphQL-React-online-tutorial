@@ -3,7 +3,7 @@ import '../models/Launch.js';
 
 const url = 'mongodb://localhost:27017/spaceX';
 
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify : true });
 
 const db = mongoose.connection;
 
