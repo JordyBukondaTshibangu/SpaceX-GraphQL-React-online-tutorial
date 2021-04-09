@@ -1,6 +1,7 @@
 import {GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLBoolean, GraphQLList, GraphQLSchema, GraphQLID, GraphQLNonNull } from 'graphql';
 import {launches, rockets} from './data.js'
 import Launch from '../models/Launch.js';
+import Rocket from '../models/Rocket.js';
 
 
 
@@ -38,9 +39,9 @@ const RootQuery = new GraphQLObjectType({
         launch : {
             type : LaunchType,
             args : { flight_number : { type : GraphQLInt}},
-            resolve : (parent, args) => {
-                const launch = launches.filter(launch => launch.flight_number === args.flight_number)
-                return launch[0]
+            resolve : async (parent, {flight_number}) => {
+                const launch = await Launch.findOne({flight_number});
+                return launch;
             }
         },
         rockets : {

@@ -12,4 +12,4 @@ const RocketModel = new Schema({
     }
 })
 
-export default mongoose.model('Launch', RocketModel);
+export default mongoose.model('Rocket', RocketModel);
