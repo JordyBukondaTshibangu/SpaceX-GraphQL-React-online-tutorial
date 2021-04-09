@@ -46,16 +46,17 @@ const RootQuery = new GraphQLObjectType({
         },
         rockets : {
             type : new GraphQLList(RocketType),
-            resolve : (parent, args) => {
+            resolve : async(parent, args) => {
+                const rockets = await Rocket.find();
                 return rockets;
             }
         },
         rocket : {
             type : RocketType,
             args : { rocket_id : { type : GraphQLInt}},
-            resolve : (parent, args) => {
-                const rocket = rockets.filter(rocket => rocket.rocket_id === args.rocket_id);
-                return rocket[0];
+            resolve : async (parent, {rocket_id}) => {
+                const rocket = await Rocket.findOne({rocket_id})
+                return rocket;
             }
         },
 
