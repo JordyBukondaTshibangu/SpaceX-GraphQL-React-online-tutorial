@@ -1,8 +1,5 @@
-import {GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLBoolean, GraphQLList, GraphQLSchema } from 'graphql';
-import axios from 'axios';
-
-const url_launches = 'https://api.spacexdata.com/v3/launches';
-const url_rockets = 'https://api.spacexdata.com/v3/rockets';
+import {GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLBoolean, GraphQLList, GraphQLSchema, GraphQLID, GraphQLNonNull } from 'graphql';
+import {launches, rockets} from './data.js'
 
 const LaunchType = new GraphQLObjectType({
     name : 'Launch',
@@ -19,7 +16,7 @@ const LaunchType = new GraphQLObjectType({
 const RocketType = new GraphQLObjectType({
     name : 'Rocket',
     fields : () => ({
-        rocket_id : { type : GraphQLString },
+        rocket_id : { type : GraphQLInt },
         rocket_name : { type : GraphQLString },
         rocket_type : { type : GraphQLString },
     })
@@ -27,70 +24,125 @@ const RocketType = new GraphQLObjectType({
 
 const RootQuery = new GraphQLObjectType({
     name : 'RootQueryType',
-    fields : {
+    fields : () => ({
         launches : {
             type : new GraphQLList(LaunchType),
             resolve : (parent, args) => {
-                return axios.get(url_launches).then(res => res.data)
+                return launches
             }
         },
         launch : {
             type : LaunchType,
             args : { flight_number : { type : GraphQLInt}},
             resolve : (parent, args) => {
-                return axios.get(`${url_launches}/${args.flight_number}`).then(res => res.data)
+                const launch = launches.filter(launch => launch.flight_number === args.flight_number)
+                return launch[0]
             }
         },
         rockets : {
             type : new GraphQLList(RocketType),
             resolve : (parent, args) => {
-                return axios.get(url_rockets).then(res => res.data)
+                return rockets;
             }
         },
         rocket : {
             type : RocketType,
-            args : { rocket_id : { type : GraphQLString}},
+            args : { rocket_id : { type : GraphQLInt}},
             resolve : (parent, args) => {
-                return axios.get(`${url_rockets}/${args.rocket_id}`).then(res => res.data)
+                const rocket = rockets.filter(rocket => rocket.rocket_id === args.rocket_id);
+                return rocket[0];
             }
         },
 
-    }
+    })
 });
 
 const RootMutation = new GraphQLObjectType({
-    name : "Mutation",
-    fields : {
+    name : 'Mutation',
+    description : 'Root Mutation',
+    fields : () => ({
+        createRocket : {
+            type : RocketType,
+            args : {
+                rocket_id : { type : GraphQLNonNull(GraphQLInt)},
+                rocket_name : { type : GraphQLNonNull(GraphQLString)},
+                rocket_type : { type : GraphQLNonNull(GraphQLString)},
+            },
+            resolve : (parent, args) => {
+                const { rocket_id, rocket_name, rocket_type } = args;
+                const newRocket = {rocket_id, rocket_name, rocket_type}
+                rockets.push(newRocket);
+                return newRocket;
+            } 
+        },
+        updateRocket : {
+            type : RocketType,
+            args : {
+                rocket_id : { type : GraphQLNonNull(GraphQLInt)},
+                rocket_name : { type : GraphQLNonNull(GraphQLString)},
+                rocket_type : { type : GraphQLNonNull(GraphQLString)},
+            },
+            resolve : (parent, args) => {
+                const { rocket_id, rocket_name, rocket_type } = args;
+                const newRocket = {rocket_id, rocket_name, rocket_type }
+                const rocketToBeupdated = rockets.filter(rocket => rocket.rocket_id === rocket.rocket_id)
+                console.log(rocketToBeupdated)
+                // rockets.push(newRocket);
+                return newRocket;
+            } 
+        },
+        deleteRocket : {
+            type : RocketType,
+            args : {
+                rocket_id : { type : GraphQLNonNull(GraphQLInt)}
+            },
+            resolve : (parent, { rocket_id}) => {
+                const rocketToBeDeleted = rockets.filter(rocket => rocket.rocket_id === rocket_id);
+                return rocketToBeDeleted[0];
+            }
+        },
         createLaunch : {
             type : LaunchType,
             args : {
-                flight_number : { type : GraphQLInt },
                 mission_name : { type : GraphQLString },
                 launch_year : { type : GraphQLString },
                 launch_date_local : { type : GraphQLString },
                 launch_success : { type : GraphQLBoolean },
                 rocket : { type : RocketType }
             },
-            resolver : (parent, args) => {
-                // save to the db
-                // data are availabe on args
-                // return created Launch   
+            resolve : (parent, args) => {
+
+                const  {
+                    mission_name ,
+                    launch_year ,
+                    launch_date_local ,
+                    launch_success 
+                } = args
+                const newLaunch = { flight_number : launches.length + 1 , mission_name , launch_year , launch_date_local , launch_success };
+                launches.push(newLaunch)
+
+                return newLaunch;
             }
         },
         updateLaunch : {
             type : LaunchType,
             args : {
-                flight_number : { type : GraphQLInt },
                 mission_name : { type : GraphQLString },
                 launch_year : { type : GraphQLString },
                 launch_date_local : { type : GraphQLString },
                 launch_success : { type : GraphQLBoolean },
-                rocket : { type : RocketType }
             },
-            resolver : (parent, args) => {
-                // update to the db
-                // data are availabe on args
-                // retturn updated Launch
+            resolve : (parent, args) => {
+
+                const  {
+                    mission_name ,
+                    launch_year ,
+                    launch_date_local ,
+                    launch_success 
+                } = args
+                
+                
+                // return args;
             }
         },
         deleteLaunch : {
@@ -98,16 +150,14 @@ const RootMutation = new GraphQLObjectType({
             args : {
                 flight_number : { type : GraphQLInt }
             },
-            resolver : (parent, args) => {
-                // delete to the db
-                // data are availabe on args
-                // retturn updated Launch
+            resolve : (parent, { flight_number}) => {
+                // find and delete from model
             }
         }
-    }
+    })
 })
 
 export default new GraphQLSchema({
     query : RootQuery,
-    mutation : Mutation
+    mutation : RootMutation
 })
