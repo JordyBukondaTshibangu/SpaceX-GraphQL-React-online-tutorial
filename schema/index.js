@@ -88,12 +88,11 @@ const RootMutation = new GraphQLObjectType({
                 rocket_name : { type : GraphQLNonNull(GraphQLString)},
                 rocket_type : { type : GraphQLNonNull(GraphQLString)},
             },
-            resolve : (parent, args) => {
+            resolve : async(parent, args) => {
                 const { rocket_id, rocket_name, rocket_type } = args;
-                const newRocket = {rocket_id, rocket_name, rocket_type }
-                const rocketToBeupdated = rockets.filter(rocket => rocket.rocket_id === rocket.rocket_id)
-                console.log(rocketToBeupdated)
-                // rockets.push(newRocket);
+                const updatedRocket = {rocket_id, rocket_name, rocket_type }
+                const newRocket = await Rocket.findOneAndUpdate({rocket_id}, updatedRocket);
+                
                 return newRocket;
             } 
         },
