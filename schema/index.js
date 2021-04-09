@@ -1,5 +1,4 @@
 import {GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLBoolean, GraphQLList, GraphQLSchema, GraphQLID, GraphQLNonNull } from 'graphql';
-import {launches, rockets} from './data.js'
 import Launch from '../models/Launch.js';
 import Rocket from '../models/Rocket.js';
 
@@ -92,7 +91,7 @@ const RootMutation = new GraphQLObjectType({
                 const { rocket_id, rocket_name, rocket_type } = args;
                 const updatedRocket = {rocket_id, rocket_name, rocket_type }
                 const newRocket = await Rocket.findOneAndUpdate({rocket_id}, updatedRocket);
-                
+
                 return newRocket;
             } 
         },
@@ -101,11 +100,12 @@ const RootMutation = new GraphQLObjectType({
             args : {
                 rocket_id : { type : GraphQLNonNull(GraphQLInt)}
             },
-            resolve : (parent, { rocket_id}) => {
-                const rocketToBeDeleted = rockets.filter(rocket => rocket.rocket_id === rocket_id);
-                return rocketToBeDeleted[0];
+            resolve : async(parent, { rocket_id}) => {
+                const rocketToBeDeleted = await Rocket.findOneAndDelete({rocket_id});
+                return rocketToBeDeleted;
             }
         },
+
         createLaunch : {
             type : LaunchType,
             args : {
