@@ -1,15 +1,17 @@
 import {GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLBoolean, GraphQLList, GraphQLSchema, GraphQLID, GraphQLNonNull } from 'graphql';
 import {launches, rockets} from './data.js'
+import Launch from '../models/Launch.js';
+
+
 
 const LaunchType = new GraphQLObjectType({
     name : 'Launch',
     fields : () => ({
         flight_number : { type : GraphQLInt },
         mission_name : { type : GraphQLString },
-        launch_year : { type : GraphQLString },
+        launch_year : { type : GraphQLInt },
         launch_date_local : { type : GraphQLString },
         launch_success : { type : GraphQLBoolean },
-        rocket : { type : RocketType }
     })
 });
 
@@ -27,8 +29,10 @@ const RootQuery = new GraphQLObjectType({
     fields : () => ({
         launches : {
             type : new GraphQLList(LaunchType),
-            resolve : (parent, args) => {
-                return launches
+            resolve : async (parent, args) => {
+                const launches = await Launch.find();
+                
+                return launches;
             }
         },
         launch : {
@@ -104,23 +108,20 @@ const RootMutation = new GraphQLObjectType({
         createLaunch : {
             type : LaunchType,
             args : {
+                flight_number : { type : GraphQLInt },
                 mission_name : { type : GraphQLString },
-                launch_year : { type : GraphQLString },
+                launch_year : { type : GraphQLInt },
                 launch_date_local : { type : GraphQLString },
                 launch_success : { type : GraphQLBoolean },
-                rocket : { type : RocketType }
             },
             resolve : (parent, args) => {
 
-                const  {
-                    mission_name ,
-                    launch_year ,
-                    launch_date_local ,
-                    launch_success 
-                } = args
-                const newLaunch = { flight_number : launches.length + 1 , mission_name , launch_year , launch_date_local , launch_success };
-                launches.push(newLaunch)
+                const  { flight_number, mission_name , launch_year , launch_date_local , launch_success } = args
 
+                const newLaunch = new Launch({ flight_number , mission_name , launch_year , launch_date_local , launch_success });
+
+                newLaunch.save();
+                
                 return newLaunch;
             }
         },
@@ -150,8 +151,9 @@ const RootMutation = new GraphQLObjectType({
             args : {
                 flight_number : { type : GraphQLInt }
             },
-            resolve : (parent, { flight_number}) => {
-                // find and delete from model
+            resolve : async (parent, { flight_number}) => {
+                const launchToBeDeleted = await Launch.findOneAndDelete({flight_number});
+                return launchToBeDeleted;
             }
         }
     })
