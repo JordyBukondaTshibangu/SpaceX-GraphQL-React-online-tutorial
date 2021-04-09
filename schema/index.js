@@ -74,10 +74,10 @@ const RootMutation = new GraphQLObjectType({
                 rocket_name : { type : GraphQLNonNull(GraphQLString)},
                 rocket_type : { type : GraphQLNonNull(GraphQLString)},
             },
-            resolve : (parent, args) => {
+            resolve : async (parent, args) => {
                 const { rocket_id, rocket_name, rocket_type } = args;
-                const newRocket = {rocket_id, rocket_name, rocket_type}
-                rockets.push(newRocket);
+                const newRocket = new Rocket({rocket_id, rocket_name, rocket_type});
+                await newRocket.save();
                 return newRocket;
             } 
         },
