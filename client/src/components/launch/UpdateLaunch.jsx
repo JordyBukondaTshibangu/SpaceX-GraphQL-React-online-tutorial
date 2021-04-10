@@ -33,7 +33,6 @@ const UpdateLaunch = props => {
     const handleUpdateLaunch = event => {
 
         event.preventDefault();
-
         const flight_number = parseInt(flightNumber);
         const launch_year = parseInt(launchYear);
         const launch_success = false;
