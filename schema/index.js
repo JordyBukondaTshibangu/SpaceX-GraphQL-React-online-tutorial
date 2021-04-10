@@ -2,27 +2,12 @@ import {GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLBoolean, GraphQLLis
 import { createLaunch, deleteLaunch, getAllLaunches, getSingleLaunch, updateLaunch } from '../resolvers/launch.js';
 import { createRocket, deleteRocket, getAllRockets, getSingleRocket, updateRocket } from '../resolvers/rocket.js';
 
+import LaunchType from '../typeDef/launchType.js';
+import RocketType from '../typeDef/rocketType.js'
 
 
-const LaunchType = new GraphQLObjectType({
-    name : 'Launch',
-    fields : () => ({
-        flight_number : { type : GraphQLInt },
-        mission_name : { type : GraphQLString },
-        launch_year : { type : GraphQLInt },
-        launch_date_local : { type : GraphQLString },
-        launch_success : { type : GraphQLBoolean },
-    })
-});
 
-const RocketType = new GraphQLObjectType({
-    name : 'Rocket',
-    fields : () => ({
-        rocket_id : { type : GraphQLInt },
-        rocket_name : { type : GraphQLString },
-        rocket_type : { type : GraphQLString },
-    })
-});
+
 
 const RootQuery = new GraphQLObjectType({
     name : 'RootQueryType',
