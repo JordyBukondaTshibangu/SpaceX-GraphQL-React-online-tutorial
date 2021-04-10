@@ -47,13 +47,10 @@ const Launch = props => {
                                 })}>{launch.launch_success ? 'Yes' : 'No'}</span></li>
                                 <li className="list-group-item">Date local : <Moment format="YYYY-MM-DD HH:mm">{ launch.flight_number }</Moment></li>
                             </ul>
-                            {/* <h4 className="my-5"></h4> */}
-                            {/* <ul className="list-group my-5">
-                                <li className="list-group-item">Rocket id : { launch.rocket.rocket_id }</li>
-                                <li className="list-group-item">Rocket Name: { launch.rocket.rocket_name }</li>
-                                <li className="list-group-item">Rocket type : { launch.rocket.rocket_type }</li>
-                            </ul> */}
-                            <Link to="/" className="btn btn-secondary">Back</Link>
+                            <div className="mt-5">
+                                <button className="btn btn-danger mx-3">Delete Launch</button>
+                                <Link to="/" className="btn btn-secondary">Back</Link>
+                            </div>
                         </>
                     }
                 </>

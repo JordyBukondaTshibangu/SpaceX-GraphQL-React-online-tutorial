@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_LAUNCH } from '../../GraphQL/Mutations';
 
 
 const NewLaunch = () => {
@@ -6,21 +8,28 @@ const NewLaunch = () => {
     const [ flightNumber, setFlightNumber ] = useState(0);
     const [ missionName, setMissionName ] = useState("");
     const [ launchYear, setLaunchYear ] = useState(0);
-    const [ launchDateLocal, setLaunchDateLocal ] = useState("");
+    const [ launch_date_local, setLaunch_date_local ] = useState("");
     const [ launchSuccess, setLaunchSuccess ] = useState(false);
+
+    const [createLaunch, { data }] = useMutation(ADD_LAUNCH);
 
     const handleLaunch = event => {
 
         event.preventDefault();
 
-        const newLaunch = {
-            flightNumber,
-            missionName,
-            launchYear,
-            launchDateLocal,
-            launchSuccess
-        }
-        console.log(newLaunch);
+        const flight_number = parseInt(flightNumber);
+        const launch_year = parseInt(launchYear);
+        const launch_success = false;
+
+        createLaunch({ variables : { 
+            flight_number,
+            mission_name : missionName,
+            launch_year,
+            launch_date_local,
+            launch_success
+        }})
+
+        console.log(data);
     }
     return (
         <div className="d-flex justify-content-center text-center">
@@ -40,7 +49,7 @@ const NewLaunch = () => {
                 </div>
                 <div className="form-group col-lg-12 mt-3">
                     <label className="my-1">Launch date local</label>
-                    <input required type="text" className="form-control" placeholder="Launch date local" value={launchDateLocal} onChange={e => { setLaunchDateLocal(e.target.value)}}/>
+                    <input required type="text" className="form-control" placeholder="Launch date local" value={launch_date_local} onChange={e => { setLaunch_date_local(e.target.value)}}/>
                 </div>
                 <div className="form-check mt-3">
                     <input required type="checkbox" className="form-check-input required" value={launchSuccess} onChange={e => { setLaunchSuccess(e.target.value)}}/>

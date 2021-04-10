@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@apollo/client';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { onError } from "@apollo/client/link/error";
 import Logo from './assets/spaceX.jpeg';
 import Launches from './components/launch/Launches';
@@ -38,7 +38,9 @@ const  App = () => {
          
             <div className="App">
               <div className="container">
-                  <img src={Logo} style={{ width : '300px', display: 'block', margin : 'auto'}} alt="logo" />
+                  <Link to="/">
+                    <img src={Logo} style={{ width : '300px', display: 'block', margin : 'auto'}} alt="logo" />
+                  </Link>
                   <div>
                     <Switch>
                       <Route exact path="/" component={Launches}/>
