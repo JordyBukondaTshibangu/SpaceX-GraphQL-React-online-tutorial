@@ -76,7 +76,7 @@ const UpdateLaunch = props => {
                     <input required type="checkbox" className="form-check-input required" value={launchSuccess} onChange={e => { setLaunchSuccess(e.target.value)}}/>
                     <label className="form-check-label" htmlFor="exampleCheck1">Launch success</label>
                 </div>
-                <button type="submit" className="btn btn-primary col-lg-8 mt-5">Submit</button>
+                <button type="submit" className="btn btn-primary col-lg-8 mt-5">Update Launch </button>
             </form>
         </div>
     )
