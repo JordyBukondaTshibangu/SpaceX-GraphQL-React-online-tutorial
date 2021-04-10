@@ -5,6 +5,7 @@ import Logo from './assets/spaceX.jpeg';
 import Launches from './components/launch/Launches';
 import Launch from './components/launch/Launch';
 import NewLaunch from './components/launch/NewLaunch';
+import UpdateLaunch from './components/launch/UpdateLaunch';
 import './App.css';
 
 
@@ -46,6 +47,7 @@ const  App = () => {
                       <Route exact path="/" component={Launches}/>
                       <Route exact path="/launch/:flight_number" component={Launch}/>
                       <Route exact path="/new-launch" component={NewLaunch}/>
+                      <Route exact path="/update-launch/:flight_number" component={UpdateLaunch}/>
                     </Switch>
                   </div>
               </div>

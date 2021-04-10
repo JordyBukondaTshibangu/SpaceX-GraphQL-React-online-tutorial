@@ -50,6 +50,7 @@ const Launch = props => {
                             <div className="mt-5">
                                 <button className="btn btn-danger mx-3">Delete Launch</button>
                                 <Link to="/" className="btn btn-secondary">Back</Link>
+                                <Link to={`/update-launch/${launch.flight_number }`} className="btn btn-info mx-3">Update Launch </Link>
                             </div>
                         </>
                     }
