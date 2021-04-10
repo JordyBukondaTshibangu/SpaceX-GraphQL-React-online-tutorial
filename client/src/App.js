@@ -2,10 +2,11 @@ import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from } from '@ap
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { onError } from "@apollo/client/link/error";
 import Logo from './assets/spaceX.jpeg';
-import Launches from './components/Launches';
-import Launch from './components/Launch';
-import './App.css';
+import Launches from './components/launch/Launches';
+import Launch from './components/launch/Launch';
 import NewLaunch from './components/launch/NewLaunch';
+import './App.css';
+
 
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

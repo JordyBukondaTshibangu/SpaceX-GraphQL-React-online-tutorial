@@ -3,8 +3,8 @@ import classNames from 'classnames';
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { LAUNCH_QUERY } from '../GraphQL/Queries';
-import LoadingSpinner from './Loader';
+import { LAUNCH_QUERY } from '../../GraphQL/Queries';
+import LoadingSpinner from '../feedback/Loader';
 
 
 const Launch = props => {
@@ -47,7 +47,7 @@ const Launch = props => {
                                 })}>{launch.launch_success ? 'Yes' : 'No'}</span></li>
                                 <li className="list-group-item">Date local : <Moment format="YYYY-MM-DD HH:mm">{ launch.flight_number }</Moment></li>
                             </ul>
-                            <h4 className="my-5"></h4>
+                            {/* <h4 className="my-5"></h4> */}
                             {/* <ul className="list-group my-5">
                                 <li className="list-group-item">Rocket id : { launch.rocket.rocket_id }</li>
                                 <li className="list-group-item">Rocket Name: { launch.rocket.rocket_name }</li>

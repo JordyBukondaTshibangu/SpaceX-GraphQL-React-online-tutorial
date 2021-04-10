@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { LAUNCHES_QUERIES } from '../GraphQL/Queries';
-import LaunchItem from './LaunchItem';
-import MissionKey from './MissionKey';
-import LoadingSpinner from './Loader';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import { LAUNCHES_QUERIES } from '../../GraphQL/Queries';
+import LaunchItem from './LaunchItem';
+import MissionKey from '../feedback/MissionKey';
+import LoadingSpinner from '../feedback/Loader';
+
 
 const Launches = () => {
 
@@ -24,7 +25,8 @@ const Launches = () => {
                 ?
                 <div>
                     <h1 className="display-4 my-5"> SpaceX Launches</h1>
-                    <h3>Add new Launch <Link to="/new-launch">new launch</Link></h3>
+                    <h3>Add new </h3>
+                    <Link to="/new-launch">new launch</Link>
                     <MissionKey />
                     {
                         loading && <LoadingSpinner />
