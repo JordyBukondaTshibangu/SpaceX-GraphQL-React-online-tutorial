@@ -1,6 +1,6 @@
 import express from 'express';
 import { graphqlHTTP, } from 'express-graphql';
-import schema from './schema/index.js'; 
+import schema from './grapqhl/schema/index.js'
 import './database/db.js';
 import cors from 'cors';
 
